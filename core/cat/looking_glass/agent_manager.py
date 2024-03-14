@@ -262,7 +262,8 @@ class AgentManager:
 
         # format memories to be inserted in the prompt
         episodic_memory_formatted_content = self.agent_prompt_episodic_memories(
-            working_memory["episodic_memories"]
+            working_memory["episodic_memories"],
+            working_memory.get_user_id()
         )
         declarative_memory_formatted_content = self.agent_prompt_declarative_memories(
             working_memory["declarative_memories"]
@@ -280,7 +281,7 @@ class AgentManager:
             "chat_history": conversation_history_formatted_content,
         }
 
-    def agent_prompt_episodic_memories(self, memory_docs: List[Document]) -> str:
+    def agent_prompt_episodic_memories(self, memory_docs: List[Document],id_user) -> str:
         """Formats episodic memories to be inserted into the prompt.
 
         Parameters
@@ -308,14 +309,14 @@ class AgentManager:
             delta = timedelta(seconds=(time.time() - timestamp))
 
             # Convert and Save timestamps to Verbal (e.g. "2 days ago")
-            memory_timestamps.append(f" ({verbal_timedelta(delta)})")
+            memory_timestamps.append(f" (detto da {id_user} {verbal_timedelta(delta)})")
 
         # Join Document text content with related temporal information
         memory_texts = [a + b for a, b in zip(memory_texts, memory_timestamps)]
 
         # Format the memories for the output
         memories_separator = "\n  - "
-        memory_content = "## Context of things the Human said in the past: " + \
+        memory_content = "## Contesto delle conversazioni passate: " + \
             memories_separator + memories_separator.join(memory_texts)
 
         # if no data is retrieved from memory don't erite anithing in the prompt
@@ -356,7 +357,7 @@ class AgentManager:
         # Format the memories for the output
         memories_separator = "\n  - "
 
-        memory_content = "## Context of documents containing relevant information: " + \
+        memory_content = "## Contesto delle informazioni rilevanti: " + \
             memories_separator + memories_separator.join(memory_texts)
 
         # if no data is retrieved from memory don't erite anithing in the prompt
