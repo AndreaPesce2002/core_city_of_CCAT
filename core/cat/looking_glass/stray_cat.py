@@ -332,7 +332,7 @@ class StrayCat:
 
             # update conversation history
             self.working_memory.update_conversation_history(who="Human", message=user_message)
-            self.working_memory.update_conversation_history(who="AI", message=final_output["content"], why=final_output["why"])
+            self.working_memory.update_conversation_history(who="TU", message=final_output["content"], why=final_output["why"])
 
             return final_output
 
