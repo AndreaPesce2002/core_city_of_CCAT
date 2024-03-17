@@ -316,7 +316,7 @@ class AgentManager:
 
         # Format the memories for the output
         memories_separator = "\n  - "
-        memory_content = "## Contesto delle conversazioni passate: " + \
+        memory_content = "## Context of things the Human said in the past: " + \
             memories_separator + memories_separator.join(memory_texts)
 
         # if no data is retrieved from memory don't erite anithing in the prompt
@@ -357,7 +357,7 @@ class AgentManager:
         # Format the memories for the output
         memories_separator = "\n  - "
 
-        memory_content = "## Contesto delle informazioni rilevanti: " + \
+        memory_content = "## Context of documents containing relevant information: " + \
             memories_separator + memories_separator.join(memory_texts)
 
         # if no data is retrieved from memory don't erite anithing in the prompt
