@@ -181,7 +181,7 @@ class AgentManager:
 
         # prepare input to be passed to the agent.
         #   Info will be extracted from working memory
-        agent_input = self.format_agent_input(stray.working_memory)
+        agent_input = self.format_agent_input(stray)
         agent_input = self.mad_hatter.execute_hook("before_agent_starts", agent_input, cat=stray)
         
         # should we run the default agent?
@@ -234,7 +234,7 @@ class AgentManager:
 
         return memory_chain_output
     
-    def format_agent_input(self, working_memory):
+    def format_agent_input(self, strey):
         """Format the input for the Agent.
 
         The method formats the strings of recalled memories and chat history that will be provided to the Langchain
@@ -258,24 +258,22 @@ class AgentManager:
         agent_prompt_chat_history
         """
 
-
-
         # format memories to be inserted in the prompt
         episodic_memory_formatted_content = self.agent_prompt_episodic_memories(
-            working_memory["episodic_memories"],
-            working_memory.get_user_id()
+            strey.working_memory["episodic_memories"],
+            strey.user_id
         )
         declarative_memory_formatted_content = self.agent_prompt_declarative_memories(
-            working_memory["declarative_memories"]
+            strey.working_memory["declarative_memories"]
         )
 
         # format conversation history to be inserted in the prompt
         conversation_history_formatted_content = self.agent_prompt_chat_history(
-            working_memory["history"]
+            strey.working_memory["history"]
         )
 
         return {
-            "input": working_memory["user_message_json"]["text"],
+            "input": strey.working_memory["user_message_json"]["text"],
             "episodic_memory": episodic_memory_formatted_content,
             "declarative_memory": declarative_memory_formatted_content,
             "chat_history": conversation_history_formatted_content,
